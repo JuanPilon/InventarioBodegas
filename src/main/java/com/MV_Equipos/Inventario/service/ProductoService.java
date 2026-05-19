@@ -1,0 +1,17 @@
+package com.MV_Equipos.Inventario.service;
+
+import com.MV_Equipos.Inventario.entity.Producto;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
+public interface ProductoService {
+    Producto guardarProducto(Producto producto);
+    Optional<Producto> buscarPorID(Integer id);
+    List<Producto> buscarProductos();
+    Optional<Producto>buscarPorCodigo(String code);
+    Producto editarParcial(Integer id, Producto productoActualizado);
+    List<Producto>buscarPorCoincidencia(String text);
+
+}
