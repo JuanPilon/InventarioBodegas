@@ -6,7 +6,6 @@ import com.MV_Equipos.Inventario.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,38 +30,42 @@ public class ProductoServiceImp implements ProductoService {
     }
 
     @Override
-    public Optional<Producto> buscarPorCodigo(String code) {
-        return productRepository.findByCode(code);
+    public Optional<Producto> buscarPorClaveGeneral(String claveGeneral) {
+        return productRepository.findByClaveGeneral(claveGeneral);
     }
 
     @Override
     public Producto editarParcial(Integer id, Producto productoActualizado) {
-        Producto producto=productRepository.findById(id).orElse(null);//si el producto no existe el objeto es null si existe se guarda el objeto en producto
-        if(producto==null){
+        Producto producto = productRepository.findById(id).orElse(null);//si el producto no existe el objeto es null si existe se guarda el objeto en producto
+        if (producto == null) {
             return null;//si el objeto es null lo regresas de inmediato
         }
-        if(productoActualizado.getName()!=null){
-            producto.setName(productoActualizado.getName());
-        }
-        if(productoActualizado.getCode()!=null){
-            producto.setCode(productoActualizado.getCode());
+        if (productoActualizado.getNombre() != null) {
+            producto.setNombre(productoActualizado.getNombre());
         }
 
-        if(productoActualizado.getSku()!=null){
-            producto.setSku(productoActualizado.getSku());
+        if (productoActualizado.getClaveGeneral() != null) {
+            producto.setClaveGeneral(productoActualizado.getClaveGeneral());
         }
-        if(productoActualizado.getPrice()!=null){
-            producto.setPrice(productoActualizado.getPrice());
+        if (productoActualizado.getTamano() != null) {
+            producto.setTamano(productoActualizado.getTamano());
         }
-        if(productoActualizado.getStock()!=null){
+        if (productoActualizado.getTipo() != null) {
+            producto.setTipo(productoActualizado.getTipo());
+        }
+        if (productoActualizado.getNomenclatura() != null) {
+            producto.setNomenclatura(productoActualizado.getNomenclatura());
+        }
+
+        if (productoActualizado.getStock() != null) {
             producto.setStock(productoActualizado.getStock());
         }
-        if (productoActualizado.getLocation()!=null){
-            producto.setLocation(productoActualizado.getLocation());
+        if (productoActualizado.getBodega() != null) {
+            producto.setBodega(productoActualizado.getBodega());
         }
 
-        if(productoActualizado.getNotes()!=null){
-            producto.setNotes(productoActualizado.getNotes());
+        if (productoActualizado.getNotas() != null) {
+            producto.setNotas(productoActualizado.getNotas());
         }
         return productRepository.save(producto);
     }
@@ -70,21 +73,7 @@ public class ProductoServiceImp implements ProductoService {
     @Override
     public List<Producto> buscarPorCoincidencia(String text) {
 
-        BigDecimal precio = null;//declaramos el precio null para poder si o no darle valor
 
-        try{
-            precio = new BigDecimal(text);//intentara realizar la conversion para revisar disponibilidar
-        }catch (NumberFormatException e){
-            // si no es número, simplemente ignoramos el precio
-        }
-
-        return productRepository
-                .findByNameContainingIgnoreCaseOrCodeContainingIgnoreCaseOrSkuContainingIgnoreCaseOrPriceOrLocationContainingIgnoreCase(
-                        text,
-                        text,
-                        text,
-                        precio,
-                        text
-                );
+        return productRepository.findByNombreContainingIgnoreCaseOrClaveGeneralContainingIgnoreCaseOrBodegaContainingIgnoreCaseOrTipoContainingIgnoreCase(text, text, text, text);
     }
 }

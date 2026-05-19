@@ -9,22 +9,27 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path="/usuario")
+@RequestMapping(path = "/usuario")
 @CrossOrigin
 public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
     @GetMapping(path = "/consultar")
-    public List<Usuario> mostrarUsuarios(){return usuarioService.obtenerUsuarios();}
-    @GetMapping(path = "/buscar/{id}")
-    public Optional<Usuario>obtenerPorID(@PathVariable Integer id){
-        return  usuarioService.obtenerPorID(id);
+    public List<Usuario> mostrarUsuarios() {
+        return usuarioService.obtenerUsuarios();
     }
-    @PostMapping(path="/crearUsuario")
-    public Usuario guardarUsuario(@RequestBody Usuario usuario){
+
+    @GetMapping(path = "/buscar/{id}")
+    public Optional<Usuario> obtenerPorID(@PathVariable Integer id) {
+        return usuarioService.obtenerPorID(id);
+    }
+
+    @PostMapping(path = "/crearUsuario")
+    public Usuario guardarUsuario(@RequestBody Usuario usuario) {
         return usuarioService.guardarUsuario(usuario);
     }
+
     @DeleteMapping("/eliminar/{id}")
     public void eliminarUsuario(@PathVariable Integer id) {
         usuarioService.eliminarUsuario(id);

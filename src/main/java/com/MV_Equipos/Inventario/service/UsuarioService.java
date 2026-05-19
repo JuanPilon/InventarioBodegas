@@ -4,6 +4,7 @@ import com.MV_Equipos.Inventario.entity.Usuario;
 
 import java.util.List;
 import java.util.Optional;
+
 //Se genero un usuarioservice como una interfaz para declarar la estructura de lo metodos para su uso posterior no tiene nivel de
 //proteccion por que java lo interpreta como public abstract
 public interface UsuarioService {
@@ -12,10 +13,10 @@ public interface UsuarioService {
 
     List<Usuario> obtenerUsuarios();
 
-    Optional <Usuario> obtenerPorID(Integer id);
+    Optional<Usuario> obtenerPorID(Integer id);
 
-    Optional <Usuario> obtenerPorUsername(String username);
+    Optional<Usuario> obtenerPorUsername(String username);
 
-    void    eliminarUsuario(Integer id);
+    void eliminarUsuario(Integer id);
 
 }

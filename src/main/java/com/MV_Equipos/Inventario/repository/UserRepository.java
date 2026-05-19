@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository// Indica al spring que esta interface tendra metodos que manejaran datos de la base
-public interface UserRepository extends JpaRepository<Usuario,Integer> { //se usa extend para heredar los metodos y atributos de jpa
+public interface UserRepository extends JpaRepository<Usuario, Integer> { //se usa extend para heredar los metodos y atributos de jpa
     //Me creo un metodo mixto para revisar la existencia de un usuario dependiendo de su nombre
     Optional<Usuario> findByUsername(String username);
 

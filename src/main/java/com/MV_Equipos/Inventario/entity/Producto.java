@@ -23,30 +23,34 @@ public class Producto {
     @Column(name = "ID")
     private Integer id;
 
-    @Column(name = "NAME", nullable = false, length = 100)
-    private String name;
+    @Column(name = "NOMBRE", nullable = false, length = 100)
+    private String nombre;
 
-    @Column(name = "CODE", nullable = false, length = 120)
-    private String code;
+    @Column(name = "CLAVE_GENERAL", nullable = false, length = 120)
+    private String claveGeneral;
 
-    @Column(name = "SKU", nullable = false, unique = true, length = 30)
-    private String sku;
+    @Column(name = "TAMANO", nullable = false, length = 45)
+    private String tamano;
 
-    @Column(name = "PRICE", nullable = false, precision = 10, scale = 2)//precision nos indica cuantos enteros tendra y el scale es cuantos digitos de ahi seran decimales
-    private BigDecimal price;
+
+    @Column(name = "TIPO", nullable = false, length = 45)
+    private String tipo;
+    @Column(name = "NOMENCLATURA", nullable = false, length = 45)
+    private String nomenclatura;
 
     @Column(name = "STOCK", nullable = false)
     private Integer stock;
 
-    @Column(name = "LOCATION", nullable = false)
-    private String location;
+    @Column(name = "Bodega", nullable = false, length = 45)
+    private String bodega;
 
     @Lob//Indica de joa que este campo tendra datos grandes como puede ser un texto
-    @Column(name = "NOTES", columnDefinition = "TEXT")
-    private String notes;
+    @Column(name = "NOTAS", columnDefinition = "TEXT")
+    private String notas;
 
     @Column(name = "C_DATE")
     private Timestamp cDate;
+
     @PrePersist// esta anotacion permite crear el dato del date antes del guardado para que no mande nulo
     public void prePersist() {
         this.cDate = new Timestamp(System.currentTimeMillis());

@@ -7,15 +7,16 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductRepository extends JpaRepository<Producto,Integer> {
+public interface ProductRepository extends JpaRepository<Producto, Integer> {
 
-    Optional<Producto> findByCode(String code);
-    List<Producto> findByNameContainingIgnoreCaseOrCodeContainingIgnoreCaseOrSkuContainingIgnoreCaseOrPriceOrLocationContainingIgnoreCase(
-            String name,
-            String code,
-            String sku,
-            BigDecimal price,
-            String location
+    Optional<Producto> findByClaveGeneral(String claveGeneral);
+
+    List<Producto> findByNombreContainingIgnoreCaseOrClaveGeneralContainingIgnoreCaseOrBodegaContainingIgnoreCaseOrTipoContainingIgnoreCase(
+            String nombre,
+            String claveGeneral,
+            String bodega,
+            String tipo
+
     );
 
 }
