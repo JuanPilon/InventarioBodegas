@@ -8,6 +8,7 @@ import com.MV_Equipos.Inventario.repository.MovementRepository;
 import com.MV_Equipos.Inventario.repository.ProductRepository;
 import com.MV_Equipos.Inventario.repository.UserRepository;
 import com.MV_Equipos.Inventario.service.MovimientoService;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,4 +80,18 @@ public class MovimientoSerciceImpl implements MovimientoService {
     public List<Movimiento> obtenerMovimientos() {
         return movementRepository.findAll();
     }
+
+    @Override
+    public List<Movimiento> obtenerPorID(Integer productoId) {
+        return movementRepository.findByProductoId_Id(productoId);
+    }
+
+    @Override
+    public List<Movimiento> obtenerEntradas(TipoMovimiento movimientoEnv) {
+        TipoMovimiento movimiento=movimientoEnv;
+        return movementRepository.findByTipoMovimiento(movimiento);
+    }
+
+
+
 }

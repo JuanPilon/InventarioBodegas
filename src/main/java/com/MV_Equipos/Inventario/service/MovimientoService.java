@@ -1,8 +1,10 @@
 package com.MV_Equipos.Inventario.service;
 
 import com.MV_Equipos.Inventario.entity.Movimiento;
+import com.MV_Equipos.Inventario.enums.TipoMovimiento;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MovimientoService {
 
@@ -17,4 +19,9 @@ public interface MovimientoService {
                                String comentarios);
 
     List<Movimiento> obtenerMovimientos();
+
+    List<Movimiento> obtenerPorID(Integer productoId);
+    List<Movimiento>obtenerEntradas(TipoMovimiento movimiento);
+
+
 }

@@ -1,6 +1,7 @@
 package com.MV_Equipos.Inventario.controller;
 
 import com.MV_Equipos.Inventario.entity.Movimiento;
+import com.MV_Equipos.Inventario.enums.TipoMovimiento;
 import com.MV_Equipos.Inventario.service.MovimientoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,14 @@ public class MovimientoController {
         return movimientoService.registrarSalida(movimiento.getProductoId().getId(),movimiento.getUserId().getId(),movimiento.getCantidad(),movimiento.getComentarios());
     }
 
+    @GetMapping(path = "/obtenerPorID/{id}")
+    public List<Movimiento>obtenerPorID(@PathVariable Integer id){
+        return movimientoService.obtenerPorID(id);
+    }
+    @GetMapping(path ="/obtenerEntradas/{movimiento}")
+    public List<Movimiento>obtenerEntradas(@PathVariable TipoMovimiento movimiento){
+        return movimientoService.obtenerEntradas(movimiento);
+    }
 
 
 }
