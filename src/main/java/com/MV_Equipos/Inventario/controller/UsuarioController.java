@@ -1,6 +1,7 @@
 package com.MV_Equipos.Inventario.controller;
 
 import com.MV_Equipos.Inventario.entity.Usuario;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.MV_Equipos.Inventario.service.UsuarioService;
@@ -26,7 +27,7 @@ public class UsuarioController {
     }
 
     @PostMapping(path = "/crearUsuario")
-    public Usuario guardarUsuario(@RequestBody Usuario usuario) {
+    public Usuario guardarUsuario(@Valid @RequestBody Usuario usuario) {
         return usuarioService.guardarUsuario(usuario);
     }
 

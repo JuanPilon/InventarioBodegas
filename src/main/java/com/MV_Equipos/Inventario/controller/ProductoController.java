@@ -2,6 +2,7 @@ package com.MV_Equipos.Inventario.controller;
 
 import com.MV_Equipos.Inventario.entity.Producto;
 import com.MV_Equipos.Inventario.service.ProductoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class ProductoController {
     }
 
     @PostMapping(path = "/crear")
-    public Producto guardarProducto(@RequestBody Producto producto) {
+    public Producto guardarProducto(@Valid @RequestBody Producto producto) {
         return productoService.guardarProducto(producto);
     }
 

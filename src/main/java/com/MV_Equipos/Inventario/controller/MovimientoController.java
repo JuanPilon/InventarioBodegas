@@ -3,6 +3,7 @@ package com.MV_Equipos.Inventario.controller;
 import com.MV_Equipos.Inventario.entity.Movimiento;
 import com.MV_Equipos.Inventario.enums.TipoMovimiento;
 import com.MV_Equipos.Inventario.service.MovimientoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,11 +23,11 @@ public class MovimientoController {
     public List<Movimiento> todosLosMovimientos(){return movimientoService.obtenerMovimientos();}
 
     @PostMapping(path = "/entrada")
-    public Movimiento registrarEntrada(@RequestBody Movimiento movimiento){
+    public Movimiento registrarEntrada(@Valid @RequestBody Movimiento movimiento){
         return movimientoService.registrarEntrada(movimiento.getProductoId().getId(),movimiento.getUserId().getId(),movimiento.getCantidad(),movimiento.getComentarios());
     }
     @PostMapping(path = "/salida")
-    public Movimiento registrarSalida(@RequestBody Movimiento movimiento){
+    public Movimiento registrarSalida(@Valid @RequestBody Movimiento movimiento){
         return movimientoService.registrarSalida(movimiento.getProductoId().getId(),movimiento.getUserId().getId(),movimiento.getCantidad(),movimiento.getComentarios());
     }
 

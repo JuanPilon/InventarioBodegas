@@ -1,6 +1,8 @@
 package com.MV_Equipos.Inventario.entity;
 import com.MV_Equipos.Inventario.enums.TipoMovimiento;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,20 +21,25 @@ public class Movimiento {
     @Column(name = "ID")
     private Integer id;
 
+    @NotNull(message = "Debe seleccionar un producto")
     @ManyToOne//indicando que muchos movimientos pertenecen a productos
     @JoinColumn(name = "PRODUCT_ID", nullable = false)
 //inidicando que el nombre de esta columna estara relacionada con la columnda perteneciente al objeto de abajo
     private Producto productoId;
 
+    @NotNull(message = "Debe seleccionar un usuario")
     @ManyToOne//indica que muchos movimientos seran realizados por usuarios
     @JoinColumn(name = "USER_ID", nullable = false)
 //indicamos que la columna mencionada se relacionara con la columna del obejeto de abajo
     private Usuario userId;
 
+    @NotNull(message = "Debe indicar el tipo de movimiento")
     @Enumerated(EnumType.STRING)
     @Column(name = "TYPE_OF_MOVEMENT", nullable = false)
     private TipoMovimiento tipoMovimiento;
 
+    @NotNull(message = "La cantidad es obligatoria")
+    @Positive(message = "La cantidad debe ser mayor a 0")
     @Column(name = "AMOUNT", nullable = false)
     private Integer cantidad;
 
