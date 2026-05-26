@@ -1,6 +1,10 @@
 package com.MV_Equipos.Inventario.entity;
 
+import com.MV_Equipos.Inventario.enums.TipoMovimiento;
+import com.MV_Equipos.Inventario.enums.TipoRol;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,19 +19,24 @@ import java.time.LocalDateTime;
 @AllArgsConstructor//nos ayuda a contruir constructores con sus argumentos por defecto
 @Builder // nos ayuda a la creacion de objetos con facilidad
 public class Usuario {
+
+
     @Id//indica que sera la llave primaria de la tabla
     @GeneratedValue(strategy = GenerationType.IDENTITY)//indica que se generara un consecutivo de forma automatica
     @Column(name = "ID")//indica que el nombre de la columna en la tabla se llama id
     private Integer id;
 
+    @NotBlank
+    @Size(min = 3, max = 80)
     @Column(name = "NAME", nullable = false, length = 80)
     private String name;
     @Column(name = "USERNAME", nullable = false, unique = true, length = 80)
     private String username;
     @Column(name = "PASSWORD", nullable = false, length = 255)
     private String password;
+    @Enumerated(EnumType.STRING)
     @Column(name = "ROL", nullable = false, length = 80)
-    private String rol;
+    private TipoRol rol;
     @Column(name = "R_DATE")
     private LocalDateTime rDate;
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "productos")
@@ -37,6 +38,14 @@ public class Producto {
     private String tipo;
     @Column(name = "NOMENCLATURA", nullable = false, length = 45)
     private String nomenclatura;
+
+    @Column(name = "PRECIO_POR_UNIDAD", precision = 10, scale = 2, nullable = false)
+    private BigDecimal precioPorUnidad;//preciosion nos indica cuantos digitos tendra ese atributo y scale cuantos seran decimales aunque en sql se usa decimal en springboot se usa bigdecimal para precios.
+
+    @Column(name = "FECHA_DE_PRECIO", nullable = false)
+// Al contradio de timestamp donde se va a generar la fecha automaticamente aqui si necesitamos mandar el dato o despues la opcion para poder modificarla
+    private LocalDate fechaDePrecio;
+
 
     @Column(name = "STOCK", nullable = false)
     private Integer stock;

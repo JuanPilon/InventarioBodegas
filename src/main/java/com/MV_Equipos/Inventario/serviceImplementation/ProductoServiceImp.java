@@ -47,6 +47,13 @@ public class ProductoServiceImp implements ProductoService {
         if (productoActualizado.getClaveGeneral() != null) {
             producto.setClaveGeneral(productoActualizado.getClaveGeneral());
         }
+        if (productoActualizado.getPrecioPorUnidad() != null) {
+            producto.setPrecioPorUnidad(productoActualizado.getPrecioPorUnidad());
+        }
+        if (productoActualizado.getFechaDePrecio() != null) {
+            producto.setFechaDePrecio(productoActualizado.getFechaDePrecio());
+        }
+
         if (productoActualizado.getTamano() != null) {
             producto.setTamano(productoActualizado.getTamano());
         }
