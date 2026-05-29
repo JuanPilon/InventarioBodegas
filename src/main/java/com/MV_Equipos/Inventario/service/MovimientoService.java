@@ -2,6 +2,7 @@ package com.MV_Equipos.Inventario.service;
 
 import com.MV_Equipos.Inventario.entity.Movimiento;
 import com.MV_Equipos.Inventario.enums.TipoMovimiento;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,8 @@ public interface MovimientoService {
     Movimiento registrarEntrada(Integer productoId,
                                 Integer usuarioId,
                                 Integer cantidad,
-                                String comentarios);
+                                String comentarios,
+                                MultipartFile archivo);
 
     Movimiento registrarSalida(Integer productoId,
                                Integer usuarioId,

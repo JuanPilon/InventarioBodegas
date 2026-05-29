@@ -6,6 +6,7 @@ import com.MV_Equipos.Inventario.service.MovimientoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +24,23 @@ public class MovimientoController {
     public List<Movimiento> todosLosMovimientos(){return movimientoService.obtenerMovimientos();}
 
     @PostMapping(path = "/entrada")
-    public Movimiento registrarEntrada(@Valid @RequestBody Movimiento movimiento){
-        return movimientoService.registrarEntrada(movimiento.getProductoId().getId(),movimiento.getUserId().getId(),movimiento.getCantidad(),movimiento.getComentarios());
+    public Movimiento registrarEntrada(
+
+            @RequestParam Integer productoId,
+            @RequestParam Integer userId,
+            @RequestParam Integer cantidad,
+            @RequestParam String comentarios,
+            @RequestParam MultipartFile archivo
+
+    ) {
+
+        return movimientoService.registrarEntrada(
+                productoId,
+                userId,
+                cantidad,
+                comentarios,
+                archivo
+        );
     }
     @PostMapping(path = "/salida")
     public Movimiento registrarSalida(@Valid @RequestBody Movimiento movimiento){

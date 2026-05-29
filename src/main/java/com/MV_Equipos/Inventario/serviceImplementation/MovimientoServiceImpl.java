@@ -10,6 +10,7 @@ import com.MV_Equipos.Inventario.repository.UserRepository;
 import com.MV_Equipos.Inventario.service.MovimientoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,9 +26,18 @@ public class MovimientoServiceImpl implements MovimientoService {
     private UserRepository userRepository;
 
     @Override
-    public Movimiento registrarEntrada(Integer productoId, Integer usuarioId, Integer cantidad, String comentarios) {
+    public Movimiento registrarEntrada(Integer productoId, Integer usuarioId, Integer cantidad, String comentarios, MultipartFile archivo) {
         Optional<Producto> productoEncontrado = productRepository.findById(productoId);
         Optional<Usuario> usuarioEncontrado = userRepository.findById(usuarioId);
+        String tipoArchivo = archivo.getContentType();
+
+        if (!tipoArchivo.equals("application/pdf") &&
+                !tipoArchivo.equals("application/xml") &&
+                !tipoArchivo.equals("text/xml")) {
+
+            throw new RuntimeException("Solo se permiten archivos PDF o XML");
+        }
+
 
         if (productoEncontrado.isPresent() && usuarioEncontrado.isPresent()) {
             Integer stockAnterior = productoEncontrado.get().getStock();

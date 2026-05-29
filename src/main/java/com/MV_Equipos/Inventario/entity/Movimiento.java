@@ -46,9 +46,18 @@ public class Movimiento {
     @Column(name = "STOCK", nullable = false)
     private Integer stockFinal;
 
+    @Column(name="FILE_NAME",length = 255)
+    private String nombreArchivo;
+
+    @Column(name="FILE_ROUTE",length = 500)
+    private String rutaArchivo;
+
+    @Column(name="FILE_TYPE",length = 200)
+    private String tipoArchivo;
     @Lob
     @Column(name = "COMMENTS", columnDefinition = "TEXT")
     private String comentarios;
+
 
     @Column(name = "MOVEMENT_DAY")
     private Timestamp mDay;
