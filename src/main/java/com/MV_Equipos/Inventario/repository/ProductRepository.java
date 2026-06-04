@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Producto, Integer> {
 
-    Optional<Producto> findByClaveGeneral(String claveGeneral);
+    Producto findByClaveGeneral(String claveGeneral);
 
     List<Producto> findByNombreContainingIgnoreCaseOrClaveGeneralContainingIgnoreCaseOrBodegaContainingIgnoreCaseOrTipoContainingIgnoreCase(
             String nombre,

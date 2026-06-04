@@ -13,7 +13,7 @@ public interface UsuarioService {
 
     List<Usuario> obtenerUsuarios();
 
-    Optional<Usuario> obtenerPorID(Integer id);
+    Usuario obtenerPorID(Integer id);
 
     Optional<Usuario> obtenerPorUsername(String username);
 

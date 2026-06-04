@@ -5,6 +5,10 @@ import com.MV_Equipos.Inventario.enums.TipoMovimiento;
 import com.MV_Equipos.Inventario.service.MovimientoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +27,11 @@ public class MovimientoController {
     @GetMapping(path = "/todosLosMovimientos")
     public List<Movimiento> todosLosMovimientos(){return movimientoService.obtenerMovimientos();}
 
+    @GetMapping(path="/movimientoPorId/{id}")
+    public Optional<Movimiento> movimientoPorID(@PathVariable Integer id ){
+        return movimientoService.buscarMovimientoPorID(id);
+    }
+
     @PostMapping(path = "/entrada")
     public Movimiento registrarEntrada(
 
@@ -30,7 +39,8 @@ public class MovimientoController {
             @RequestParam Integer userId,
             @RequestParam Integer cantidad,
             @RequestParam String comentarios,
-            @RequestParam MultipartFile archivo
+            @RequestParam (required = false)
+            MultipartFile archivo
 
     ) {
 
@@ -51,10 +61,33 @@ public class MovimientoController {
     public List<Movimiento>obtenerPorID(@PathVariable Integer id){
         return movimientoService.obtenerPorID(id);
     }
-    @GetMapping(path ="/obtenerEntradas/{movimiento}")
-    public List<Movimiento>obtenerEntradas(@PathVariable TipoMovimiento movimiento){
+    @GetMapping(path ="/obtenerTipoDeMovimiento/{movimiento}")
+    public List<Movimiento>obtenerEntradasYSalidas(@PathVariable TipoMovimiento movimiento){
         return movimientoService.obtenerEntradas(movimiento);
     }
+    @GetMapping("/{id}/archivo")
+    public ResponseEntity<Resource> descargarArchivo(
+            @PathVariable Integer id) {
+
+        Movimiento movimiento =
+                movimientoService.buscarMovimientoPorID(id)
+                        .orElseThrow();
+
+        Resource archivo =
+                movimientoService.obtenerArchivoMovimiento(id);
+
+        return ResponseEntity.ok()
+                .contentType(
+                        MediaType.parseMediaType(
+                                movimiento.getTipoArchivo()))
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"" +
+                                movimiento.getNombreArchivo() +
+                                "\"")
+                .body(archivo);
+    }
+
 
 
 }

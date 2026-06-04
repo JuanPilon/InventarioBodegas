@@ -56,6 +56,7 @@ public class Producto {
     private BigDecimal precioPorUnidad;//preciosion nos indica cuantos digitos tendra ese atributo y scale cuantos seran decimales aunque en sql se usa decimal en springboot se usa bigdecimal para precios.
 
     @NotNull(message = "Por favor registra la fecha del cambio de precio")
+    @PastOrPresent(message = "La fecha no puede ser futura")//Indica que solo se puede registrar una fecha presente o pasada pero nunca futura
     @Column(name = "FECHA_DE_PRECIO", nullable = false)
 // Al contradio de timestamp donde se va a generar la fecha automaticamente aqui si necesitamos mandar el dato o despues la opcion para poder modificarla
     private LocalDate fechaDePrecio;

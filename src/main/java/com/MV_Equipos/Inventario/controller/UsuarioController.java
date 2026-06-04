@@ -22,7 +22,7 @@ public class UsuarioController {
     }
 
     @GetMapping(path = "/buscar/{id}")
-    public Optional<Usuario> obtenerPorID(@PathVariable Integer id) {
+    public Usuario obtenerPorID(@PathVariable Integer id) {
         return usuarioService.obtenerPorID(id);
     }
 

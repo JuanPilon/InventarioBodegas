@@ -8,11 +8,11 @@ import java.util.Optional;
 public interface ProductoService {
     Producto guardarProducto(Producto producto);
 
-    Optional<Producto> buscarPorID(Integer id);
+    Producto buscarPorID(Integer id);
 
     List<Producto> buscarProductos();
 
-    Optional<Producto> buscarPorClaveGeneral(String claveGeneral);
+    Producto buscarPorClaveGeneral(String claveGeneral);
 
     Producto editarParcial(Integer id, Producto productoActualizado);
 

@@ -28,19 +28,19 @@ public class ProductoController {
     }
 
     @GetMapping(path = "/buscarPorID/{id}")
-    public Optional<Producto> buscarPorID(@PathVariable Integer id) {
+    public Producto buscarPorID(@PathVariable Integer id) {
         return productoService.buscarPorID(id);
     }
 
     @GetMapping(path = "/buscarPorCode/{clave}")
-    public Optional<Producto> buscarPorCode(@PathVariable String clave) {
+    public Producto buscarPorCode(@PathVariable String clave) {
         return productoService.buscarPorClaveGeneral(clave);
     }
 
     @PatchMapping("/editar/{id}")
     public Producto editarParcial(
             @PathVariable Integer id,
-            @RequestBody Producto productoActualizado) {
+            @Valid @RequestBody Producto productoActualizado) {
 
         return productoService.editarParcial(id, productoActualizado);
     }

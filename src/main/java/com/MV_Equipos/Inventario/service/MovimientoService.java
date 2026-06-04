@@ -2,6 +2,7 @@ package com.MV_Equipos.Inventario.service;
 
 import com.MV_Equipos.Inventario.entity.Movimiento;
 import com.MV_Equipos.Inventario.enums.TipoMovimiento;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -24,6 +25,9 @@ public interface MovimientoService {
 
     List<Movimiento> obtenerPorID(Integer productoId);
     List<Movimiento>obtenerEntradas(TipoMovimiento movimiento);
+    Optional<Movimiento>buscarMovimientoPorID(Integer id);
+    Resource obtenerArchivoMovimiento(Integer movimientoId);
+
 
 
 }
