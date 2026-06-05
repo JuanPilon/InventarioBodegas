@@ -20,6 +20,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override//nos idica que estamos trabajando con un metodo modificado del repositorio
     public Usuario guardarUsuario(Usuario usuario) {
 
+        usuario.setName(normalizarUsuario(usuario.getName()));
         usuario.setUsername(normalizarUsuario(usuario.getUsername()));//El metodo elimina espacios y cambia automaticamente a mayusculas para el guardado del usuario
         validarUsuarioExistente(usuario.getUsername());//permite la revision de usuario ya existente
         validarPassword(usuario);//Verifica que la contrasena contenga una mayuscula y un numero

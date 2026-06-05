@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping(path = "/Movimiento")
@@ -28,7 +28,7 @@ public class MovimientoController {
     public List<Movimiento> todosLosMovimientos(){return movimientoService.obtenerMovimientos();}
 
     @GetMapping(path="/movimientoPorId/{id}")
-    public Optional<Movimiento> movimientoPorID(@PathVariable Integer id ){
+    public Movimiento movimientoPorID(@PathVariable Integer id ){
         return movimientoService.buscarMovimientoPorID(id);
     }
 
@@ -70,8 +70,7 @@ public class MovimientoController {
             @PathVariable Integer id) {
 
         Movimiento movimiento =
-                movimientoService.buscarMovimientoPorID(id)
-                        .orElseThrow();
+                movimientoService.buscarMovimientoPorID(id);
 
         Resource archivo =
                 movimientoService.obtenerArchivoMovimiento(id);

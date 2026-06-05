@@ -25,7 +25,7 @@ public interface MovimientoService {
 
     List<Movimiento> obtenerPorID(Integer productoId);
     List<Movimiento>obtenerEntradas(TipoMovimiento movimiento);
-    Optional<Movimiento>buscarMovimientoPorID(Integer id);
+    Movimiento buscarMovimientoPorID(Integer id);
     Resource obtenerArchivoMovimiento(Integer movimientoId);
 
 

@@ -115,9 +115,13 @@ public class ProductoServiceImp implements ProductoService {
     public List<Producto> buscarPorCoincidencia(String text) {
         validarTexto(text);
         String texto=normalizarTexto(text);
+        List<Producto> productosEncontrados=productRepository.findByNombreContainingIgnoreCaseOrClaveGeneralContainingIgnoreCaseOrBodegaContainingIgnoreCaseOrTipoContainingIgnoreCase(texto, texto, texto, texto);
+        if(productosEncontrados.isEmpty()){
+            throw new RuntimeException("No se encontraron coincidencias con los datos ingresados");
 
-        return productRepository.findByNombreContainingIgnoreCaseOrClaveGeneralContainingIgnoreCaseOrBodegaContainingIgnoreCaseOrTipoContainingIgnoreCase(texto, texto, texto, texto);
-    }
+        }
+        return productosEncontrados;
+}
 
     //Funciones para validaciones en service
 

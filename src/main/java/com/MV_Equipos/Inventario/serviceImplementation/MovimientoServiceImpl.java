@@ -5,9 +5,9 @@ import com.MV_Equipos.Inventario.entity.Producto;
 import com.MV_Equipos.Inventario.entity.Usuario;
 import com.MV_Equipos.Inventario.enums.TipoMovimiento;
 import com.MV_Equipos.Inventario.repository.MovementRepository;
-import com.MV_Equipos.Inventario.repository.ProductRepository;
-import com.MV_Equipos.Inventario.repository.UserRepository;
 import com.MV_Equipos.Inventario.service.MovimientoService;
+import com.MV_Equipos.Inventario.service.ProductoService;
+import com.MV_Equipos.Inventario.service.UsuarioService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class MovimientoServiceImpl implements MovimientoService {
@@ -30,17 +30,17 @@ public class MovimientoServiceImpl implements MovimientoService {
     @Autowired
     private MovementRepository movementRepository;
     @Autowired
-    private ProductRepository productRepository;
+    private ProductoService productoService;
     @Autowired
-    private UserRepository userRepository;
+    private UsuarioService usuarioService;
 
 
 
     @Transactional
     @Override
     public Movimiento registrarEntrada(Integer productoId, Integer usuarioId, Integer cantidad, String comentarios, MultipartFile archivo) {
-        Optional<Producto> productoEncontrado = productRepository.findById(productoId);
-        Optional<Usuario> usuarioEncontrado = userRepository.findById(usuarioId);
+        Producto productoEncontrado = productoService.buscarPorID(productoId);
+        Usuario usuarioEncontrado = usuarioService.obtenerPorID(usuarioId);
         String tipoArchivo = null;
         String nombreArchivo = null;
         Path rutaArchivo = null;
@@ -67,16 +67,16 @@ public class MovimientoServiceImpl implements MovimientoService {
 
 
 
-        if (productoEncontrado.isPresent() && usuarioEncontrado.isPresent()) {
-            Integer stockAnterior = productoEncontrado.get().getStock();
-            Integer stockFinal = stockAnterior + cantidad;
-            productoEncontrado.get().setStock(stockFinal);
-            productRepository.save(productoEncontrado.get());
+            Integer cantidadValidada=validarCantidad(cantidad);
+            Integer stockAnterior = productoEncontrado.getStock();
+            Integer stockFinal = stockAnterior + cantidadValidada;
+            productoEncontrado.setStock(stockFinal);
+            productoService.guardarProducto(productoEncontrado);
             Movimiento movimiento = Movimiento.builder()//gracias a loombok podemos crear los objetos de forma mas estructurada
-                    .productoId(productoEncontrado.get())
-                    .userId(usuarioEncontrado.get())
+                    .productoId(productoEncontrado)
+                    .userId(usuarioEncontrado)
                     .tipoMovimiento(TipoMovimiento.ENTRADA)
-                    .cantidad(cantidad)
+                    .cantidad(cantidadValidada)
                     .stockFinal(stockFinal)
                     .comentarios(comentarios)
                     .nombreArchivo(nombreArchivo)//Mandara los datos de los atributos que se agregaron para cargar archivos
@@ -95,44 +95,48 @@ public class MovimientoServiceImpl implements MovimientoService {
 
                 } catch (IOException e) {
 
-                    throw new RuntimeException(
-                            "Error al guardar el archivo");
+                    throw new RuntimeException("Error al guardar el archivo");
                 }
             }
 
 
             return movementRepository.save(movimiento);
-        }
-        throw new RuntimeException("Producto o usuario no encontrado");
+
+
 
     }
+
+
 
     @Transactional
     @Override
     public Movimiento registrarSalida(Integer productoId, Integer usuarioId, Integer cantidad, String comentarios) {
-        Optional<Producto> productoEncontrado = productRepository.findById(productoId);
-        Optional<Usuario> usuarioEncontrado = userRepository.findById(usuarioId);
+        Producto productoEncontrado = productoService.buscarPorID(productoId);
+        Usuario usuarioEncontrado = usuarioService.obtenerPorID(usuarioId);
 
-        if (productoEncontrado.isPresent() && usuarioEncontrado.isPresent()) {
-            Integer stockAnterior = productoEncontrado.get().getStock();
-            Integer stockFinal = stockAnterior - cantidad;
-            if (stockFinal >= 0) {
-                productoEncontrado.get().setStock(stockFinal);
-                productRepository.save(productoEncontrado.get());
+            Integer cantidadValidada=validarCantidad(cantidad);
+            Integer stockAnterior = productoEncontrado.getStock();
+            if(cantidadValidada>stockAnterior){
+                throw new RuntimeException("No hay suficiente stock");
+            }
+            Integer stockFinal = stockAnterior - cantidadValidada;
+
+                productoEncontrado.setStock(stockFinal);
+                productoService.guardarProducto(productoEncontrado);
                 Movimiento movimiento = Movimiento.builder()
-                        .productoId(productoEncontrado.get())
-                        .userId(usuarioEncontrado.get())
+                        .productoId(productoEncontrado)
+                        .userId(usuarioEncontrado)
                         .tipoMovimiento(TipoMovimiento.SALIDA)
-                        .cantidad(cantidad)
+                        .cantidad(cantidadValidada)
                         .stockFinal(stockFinal)
                         .comentarios(comentarios)
                         .build();
                 return movementRepository.save(movimiento);
-            }
 
-            throw new RuntimeException("No puedes darle salida a stock que no tienes");
-        }
-        throw new RuntimeException("Producto o usuario no encontrado");
+
+
+
+
     }
 
     @Transactional(readOnly = true)
@@ -143,31 +147,39 @@ public class MovimientoServiceImpl implements MovimientoService {
     @Transactional(readOnly = true)
     @Override
     public List<Movimiento> obtenerPorID(Integer productoId) {
+
+        validarId(productoId);
+        productoService.buscarPorID(productoId);
+
         return movementRepository.findByProductoId_Id(productoId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Movimiento> obtenerEntradas(TipoMovimiento movimientoEnv) {
-        TipoMovimiento movimiento = movimientoEnv;
-        return movementRepository.findByTipoMovimiento(movimiento);
+
+        return movementRepository.findByTipoMovimiento(movimientoEnv);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public Optional<Movimiento> buscarMovimientoPorID(Integer id) {
-        return movementRepository.findById(id);
+    public Movimiento buscarMovimientoPorID(Integer id) {
+
+        validarId(id);
+        return movementRepository.findById(id).orElseThrow(()->new RuntimeException("Movimiento no encontrado"));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Resource obtenerArchivoMovimiento(Integer movimientoId) {
-        Movimiento movimiento= movementRepository.findById(movimientoId).orElse(null);
-        if(movimiento==null){
-            throw new RuntimeException("El movimiento no existe revisar el dato");
-        }
-        Path ruta= Paths.get(movimiento.getRutaArchivo());
-        if(ruta==null){
+        Movimiento movimiento= buscarMovimientoPorID(movimientoId);
+
+        if(movimiento.getRutaArchivo()==null){
             throw new RuntimeException("El movimiento no contiene un archivo asociado");
 
         }
+        Path ruta= Paths.get(movimiento.getRutaArchivo());
+
         try {
 
             Resource resource =
@@ -187,6 +199,19 @@ public class MovimientoServiceImpl implements MovimientoService {
                 "Archivo no encontrado");
 
 
+    }
+
+    private Integer validarCantidad(Integer cantidad) {
+        if(cantidad==null|| cantidad<=0){
+            throw new RuntimeException("El campo no puede ir vacio y debe ser mayor que 0");
+        }
+        return cantidad;
+    }
+
+    private void validarId(Integer id){
+        if(id==null||id<=0){
+            throw new RuntimeException("El campo id no puede ser vacio y debe ser mayor a 0 ");
+        }
     }
 
 

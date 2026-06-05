@@ -40,7 +40,7 @@ public class ProductoController {
     @PatchMapping("/editar/{id}")
     public Producto editarParcial(
             @PathVariable Integer id,
-            @Valid @RequestBody Producto productoActualizado) {
+            @RequestBody Producto productoActualizado) {
 
         return productoService.editarParcial(id, productoActualizado);
     }
