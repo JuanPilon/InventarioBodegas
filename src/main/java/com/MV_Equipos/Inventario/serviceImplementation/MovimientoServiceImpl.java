@@ -1,5 +1,7 @@
 package com.MV_Equipos.Inventario.serviceImplementation;
 
+import com.MV_Equipos.Inventario.Exception.RecursoNoEncontradoException;
+import com.MV_Equipos.Inventario.Exception.ValidacionException;
 import com.MV_Equipos.Inventario.entity.Movimiento;
 import com.MV_Equipos.Inventario.entity.Producto;
 import com.MV_Equipos.Inventario.entity.Usuario;
@@ -58,8 +60,7 @@ public class MovimientoServiceImpl implements MovimientoService {
                             !tipoArchivo.equals("application/xml") &&
                             !tipoArchivo.equals("text/xml"))) {
 
-                throw new RuntimeException(
-                        "Solo se permiten archivos PDF o XML");
+                throw new ValidacionException("Solo se permiten archivos PDF o XML");
             }
             nombreArchivo = archivo.getOriginalFilename();
             rutaArchivo =Paths.get(rutaCarpeta + nombreArchivo);
@@ -95,7 +96,7 @@ public class MovimientoServiceImpl implements MovimientoService {
 
                 } catch (IOException e) {
 
-                    throw new RuntimeException("Error al guardar el archivo");
+                    throw new ValidacionException("Error al guardar el archivo");
                 }
             }
 
@@ -117,7 +118,7 @@ public class MovimientoServiceImpl implements MovimientoService {
             Integer cantidadValidada=validarCantidad(cantidad);
             Integer stockAnterior = productoEncontrado.getStock();
             if(cantidadValidada>stockAnterior){
-                throw new RuntimeException("No hay suficiente stock");
+                throw new ValidacionException("No hay suficiente stock");
             }
             Integer stockFinal = stockAnterior - cantidadValidada;
 
@@ -166,7 +167,7 @@ public class MovimientoServiceImpl implements MovimientoService {
     public Movimiento buscarMovimientoPorID(Integer id) {
 
         validarId(id);
-        return movementRepository.findById(id).orElseThrow(()->new RuntimeException("Movimiento no encontrado"));
+        return movementRepository.findById(id).orElseThrow(()->new RecursoNoEncontradoException("Movimiento no encontrado"));
     }
 
     @Transactional(readOnly = true)
@@ -175,7 +176,7 @@ public class MovimientoServiceImpl implements MovimientoService {
         Movimiento movimiento= buscarMovimientoPorID(movimientoId);
 
         if(movimiento.getRutaArchivo()==null){
-            throw new RuntimeException("El movimiento no contiene un archivo asociado");
+            throw new ValidacionException("El movimiento no contiene un archivo asociado");
 
         }
         Path ruta= Paths.get(movimiento.getRutaArchivo());
@@ -185,17 +186,17 @@ public class MovimientoServiceImpl implements MovimientoService {
             Resource resource =
                     new UrlResource(ruta.toUri());
 
-            if (resource.exists()) {
+            if (resource.exists() && resource.isReadable()) {
                 return resource;
             }
 
         } catch (MalformedURLException e) {
 
-            throw new RuntimeException(
+            throw new ValidacionException(
                     "Error al cargar archivo");
         }
 
-        throw new RuntimeException(
+        throw new RecursoNoEncontradoException(
                 "Archivo no encontrado");
 
 
@@ -203,14 +204,14 @@ public class MovimientoServiceImpl implements MovimientoService {
 
     private Integer validarCantidad(Integer cantidad) {
         if(cantidad==null|| cantidad<=0){
-            throw new RuntimeException("El campo no puede ir vacio y debe ser mayor que 0");
+            throw new ValidacionException("El campo no puede ir vacio y debe ser mayor que 0");
         }
         return cantidad;
     }
 
     private void validarId(Integer id){
         if(id==null||id<=0){
-            throw new RuntimeException("El campo id no puede ser vacio y debe ser mayor a 0 ");
+            throw new ValidacionException("El campo id no puede ser vacio y debe ser mayor a 0 ");
         }
     }
 
