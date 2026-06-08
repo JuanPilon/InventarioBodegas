@@ -56,13 +56,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Transactional
     @Override
-    public void eliminarUsuario(Integer id) {
+    public Usuario eliminarUsuario(Integer id) {
 
         validarId(id);
         if(!userRepository.existsById(id)){
             throw new RecursoNoEncontradoException("El usuario a elminar no existe ");
         }
+        Usuario usuarioEliminado= obtenerPorID(id);
         userRepository.deleteById(id);
+        return usuarioEliminado;
 
     }
 

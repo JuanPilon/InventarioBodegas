@@ -16,6 +16,6 @@ public interface UsuarioService {
 
     Usuario obtenerPorUsername(String username);
 
-    void eliminarUsuario(Integer id);
+    Usuario eliminarUsuario(Integer id);
 
 }
