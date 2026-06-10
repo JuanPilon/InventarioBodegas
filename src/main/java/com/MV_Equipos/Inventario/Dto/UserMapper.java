@@ -20,6 +20,7 @@ public class UserMapper {
 
     public UserResponseDto toResponse(Usuario entity) {// vamos a convertir el objeto creado en un objeto de tipo respuesta
         return UserResponseDto.builder()
+                .id(entity.getId())
                 .name(entity.getName())
                 .username(entity.getUsername())
                 .build();

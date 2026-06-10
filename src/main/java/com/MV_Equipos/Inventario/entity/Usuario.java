@@ -27,19 +27,15 @@ public class Usuario {
     @Column(name = "ID")//indica que el nombre de la columna en la tabla se llama id
     private Integer id;
 
-    @NotBlank(message = "No puedes dejar el campo nombre vacio")
-    @Size(min = 3, max = 80)
+
     @Column(name = "NAME", nullable = false, length = 80)
     private String name;
 
-    @NotBlank(message = "No puedes dejar el campo username vacio")
-    @Size(min = 4, max = 80,message = "Almenos 4 caracteres ")
-    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username Invalido")
+
     @Column(name = "USERNAME", nullable = false, unique = true, length = 80)
     private String username;
 
-    @NotBlank(message = "No puedes dejar el campo password vacio")
-    @Size(min = 8, max = 255,message = "Almenos 8 caracteres ")
+
     @Column(name = "PASSWORD", nullable = false, length = 255)
     private String password;
 

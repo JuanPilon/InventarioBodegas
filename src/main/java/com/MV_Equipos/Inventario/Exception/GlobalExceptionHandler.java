@@ -16,50 +16,74 @@ import java.util.List;
 public class GlobalExceptionHandler  {
     @ExceptionHandler(RecursoNoEncontradoException.class)//va a interceptar cualquier peticion de este tipo de excepciones
     public ResponseEntity<ErrorResponse> manejarRecurso(RecursoNoEncontradoException ex){
-        ErrorResponse error= new ErrorResponse(LocalDateTime.now(),404,ex.getMessage());
+        ErrorResponse error= ErrorResponse.builder()
+                .fecha(LocalDateTime.now())
+                .codigo(404)
+                .error(ex.getMessage())
+                .build();
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(ValidacionException.class)
-    public ResponseEntity<ErrorResponse> manejarValidacion(ValidacionException ex){
-        ErrorResponse error= new ErrorResponse(LocalDateTime.now(),400,ex.getMessage());
-        //Se arma un objeto que va a tener los campos necesarios como la fecha el codigo del error y el mensaje que se extrajo
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-    }
+    public ResponseEntity<ErrorResponse> manejarValidacion(
+            ValidacionException ex){
 
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorResponse> manejarConstraintViolation(
-            ConstraintViolationException ex) {
-
-        String mensaje = ex.getConstraintViolations()
-                .stream()
-                .map(violation -> violation.getMessage())
-                .findFirst()
-                .orElse("Error de validación");
-
-        ErrorResponse error = new ErrorResponse(
-                LocalDateTime.now(),
-                400,
-                mensaje
-        );
+        ErrorResponse error = ErrorResponse.builder()
+                .fecha(LocalDateTime.now())
+                .codigo(400)
+                .error(ex.getMessage())
+                .build();
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(error);
     }
 
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> manejarConstraintViolation(
+            ConstraintViolationException ex){
+
+        List<String> errores = ex.getConstraintViolations()
+                .stream()
+                .map(error ->
+                        error.getPropertyPath() + ": "
+                                + error.getMessage())
+                .toList();
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .fecha(LocalDateTime.now())
+                .codigo(400)
+                .error("Error de validación")
+                .errores(errores)
+                .build();
+
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<String>> manejarValidacionesDto(
-            MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> manejarValidacionesDto(
+            MethodArgumentNotValidException ex){
 
         List<String> errores = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(error -> error.getDefaultMessage())
+                .map(error ->
+                        error.getField() + ": "
+                                + error.getDefaultMessage())
                 .toList();
 
-        return ResponseEntity.badRequest().body(errores);
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .fecha(LocalDateTime.now())
+                .codigo(400)
+                .error("Error de validación")
+                .errores(errores)
+                .build();
+
+        return ResponseEntity
+                .badRequest()
+                .body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)
@@ -67,11 +91,12 @@ public class GlobalExceptionHandler  {
 
 
 
-        ErrorResponse error =
-                new ErrorResponse(LocalDateTime.now(),
-                        500,
-                        "Error interno del servidor"
-                );
+        ErrorResponse error =ErrorResponse.builder()
+                .fecha(LocalDateTime.now())
+                .codigo(500)
+                .error(ex.getMessage())
+                .build();
+
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -38,5 +38,20 @@ public class ProductoMapper {
                 .build();
 
     }
+    public Producto toEntityDtoEdit(ProductEditRequestDto productoRequestDto) {
+
+        return Producto.builder()
+                .nombre(productoRequestDto.getNombre())
+                .claveGeneral(productoRequestDto.getClaveGeneral())
+                .tamano(productoRequestDto.getTamano())
+                .tipo(productoRequestDto.getTipo())
+                .nomenclatura(productoRequestDto.getNomenclatura())
+                .precioPorUnidad(productoRequestDto.getPrecioPorUnidad())
+                .fechaDePrecio(productoRequestDto.getFechaDePrecio())
+                .stock(productoRequestDto.getStock())
+                .bodega(productoRequestDto.getBodega())
+                .notas(productoRequestDto.getNotas())
+                .build();
+    }
 
 }

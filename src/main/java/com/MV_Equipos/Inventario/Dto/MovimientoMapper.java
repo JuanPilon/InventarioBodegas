@@ -9,31 +9,25 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MovimientoMapper {
-    public Movimiento toEntity(MovimientoRequestDto dto) {
-        return  Movimiento.builder()
-                .productoId(dto.getProductoId())
-                .userId(dto.getUserId())
-                .tipoMovimiento(dto.getTipoMovimiento())
-                .cantidad(dto.getCantidad())
-                .stockFinal(dto.getStockFinal())
-                .nombreArchivo(dto.getNombreArchivo())
-                .rutaArchivo(dto.getRutaArchivo())
-                .tipoArchivo(dto.getTipoArchivo())
-                .comentarios(dto.getComentarios())
-                .build();
-
-
-    }
+//    public Movimiento toEntity(MovimientoRequestDto dto) {
+//        return  Movimiento.builder()
+//                .productoId(dto.getProductoId())
+//                .userId(dto.getUserId())
+//                .tipoMovimiento(dto.getTipoMovimiento())
+//                .cantidad(dto.getCantidad())
+//                .comentarios(dto.getComentarios())
+//                .build();
+//
+//
+//    }
 
     public MovimientoResponseDto toResponseDto(Movimiento entity) {
-        System.out.println("NAME: " + entity.getUserId().getName());
-        System.out.println("ROL: " + entity.getUserId().getRol());
-        System.out.println("USERNAME: " + entity.getUserId().getUsername());
+
 
 
         return MovimientoResponseDto.builder()
                 .idMovimiento(entity.getId())
-                .productoId(entity.getProductoId().getId())
+                .productoId(entity.getProductoId().getId())//Solo en la respuesta debemos extraer los datos que necesitamos sobre el objeto tecnicamente con el id nos trae el objeto y de ahi obtenemos el dato necesario
                 .userId(entity.getUserId().getId())
                 .usuario(entity.getUserId().getName())
                 .tipoMovimiento(entity.getTipoMovimiento())
