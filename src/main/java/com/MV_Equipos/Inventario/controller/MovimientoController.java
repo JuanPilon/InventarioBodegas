@@ -1,5 +1,8 @@
 package com.MV_Equipos.Inventario.controller;
 
+import com.MV_Equipos.Inventario.Dto.MovimientoMapper;
+import com.MV_Equipos.Inventario.Dto.MovimientoRequestDto;
+import com.MV_Equipos.Inventario.Dto.MovimientoResponseDto;
 import com.MV_Equipos.Inventario.entity.Movimiento;
 import com.MV_Equipos.Inventario.enums.TipoMovimiento;
 import com.MV_Equipos.Inventario.service.MovimientoService;
@@ -23,47 +26,62 @@ public class MovimientoController {
 
     @Autowired
     private MovimientoService movimientoService;
+    @Autowired
+    private MovimientoMapper movimientoMapper;
 
     @GetMapping(path = "/todosLosMovimientos")
-    public List<Movimiento> todosLosMovimientos(){return movimientoService.obtenerMovimientos();}
+    public List<MovimientoResponseDto> todosLosMovimientos(){
+        List<Movimiento>movimientosEncontrados=movimientoService.obtenerMovimientos();
+        return movimientosEncontrados.stream()
+                .map(movimientoMapper::toResponseDto)
+                .toList();
+    }
 
     @GetMapping(path="/movimientoPorId/{id}")
-    public Movimiento movimientoPorID(@PathVariable Integer id ){
-        return movimientoService.buscarMovimientoPorID(id);
+    public MovimientoResponseDto movimientoPorID(@PathVariable Integer id ){
+
+
+        return movimientoMapper.toResponseDto(movimientoService.buscarMovimientoPorID(id));
     }
 
     @PostMapping(path = "/entrada")
-    public Movimiento registrarEntrada(
-
-            @RequestParam Integer productoId,
+    public MovimientoResponseDto registrarEntrada(@RequestParam Integer productoId,
             @RequestParam Integer userId,
             @RequestParam Integer cantidad,
             @RequestParam String comentarios,
             @RequestParam (required = false)
-            MultipartFile archivo
+            MultipartFile archivo) {
 
-    ) {
-
-        return movimientoService.registrarEntrada(
+        return movimientoMapper.toResponseDto(movimientoService.registrarEntrada(
                 productoId,
                 userId,
                 cantidad,
                 comentarios,
                 archivo
-        );
+        ));
     }
     @PostMapping(path = "/salida")
-    public Movimiento registrarSalida(@Valid @RequestBody Movimiento movimiento){
-        return movimientoService.registrarSalida(movimiento.getProductoId().getId(),movimiento.getUserId().getId(),movimiento.getCantidad(),movimiento.getComentarios());
+    public MovimientoResponseDto registrarSalida(@Valid @RequestBody MovimientoRequestDto movimiento){
+        Movimiento movimientoAcrear= movimientoMapper.toEntity(movimiento);
+        return movimientoMapper.toResponseDto(movimientoService.registrarSalida(movimiento.getProductoId().getId(),movimiento.getUserId().getId(),movimiento.getCantidad(),movimiento.getComentarios())) ;
     }
 
     @GetMapping(path = "/obtenerPorID/{id}")
-    public List<Movimiento>obtenerPorID(@PathVariable Integer id){
-        return movimientoService.obtenerPorID(id);
+    public List<MovimientoResponseDto>obtenerPorID(@PathVariable Integer id){
+        List<Movimiento> movimientosEncontrados=movimientoService.obtenerPorID(id);
+
+        return movimientosEncontrados.stream()
+                .map(movimientoMapper::toResponseDto)
+                .toList();
     }
     @GetMapping(path ="/obtenerTipoDeMovimiento/{movimiento}")
-    public List<Movimiento>obtenerEntradasYSalidas(@PathVariable TipoMovimiento movimiento){
-        return movimientoService.obtenerEntradas(movimiento);
+    public List<MovimientoResponseDto>obtenerEntradasYSalidas(@PathVariable TipoMovimiento movimiento){
+        List<Movimiento> movimientosEncontrados=movimientoService.obtenerEntradas(movimiento);
+
+        return movimientosEncontrados.stream()
+                .map(movimientoMapper::toResponseDto)
+                .toList();
+
     }
     @GetMapping("/{id}/archivo")
     public ResponseEntity<Resource> descargarArchivo(
