@@ -19,7 +19,8 @@ import java.sql.Timestamp;
 @NoArgsConstructor// nos ayudara a generar constructores sin argumentos
 @AllArgsConstructor//nos ayuda a contruir constructores con sus argumentos por defecto
 @Builder // nos ayuda a la creacion de objetos con facilidad
-public class Usuario {
+public class
+Usuario {
 
 
     @Id//indica que sera la llave primaria de la tabla

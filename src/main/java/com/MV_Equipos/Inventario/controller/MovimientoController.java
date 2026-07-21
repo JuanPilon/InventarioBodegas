@@ -63,7 +63,7 @@ public class MovimientoController {
     })
     @PostMapping(path = "/entrada")
     public ResponseEntity <MovimientoResponseDto> registrarEntrada(@RequestParam Integer productoId,
-            @RequestParam Integer userId,
+
             @RequestParam Integer cantidad,
             @RequestParam String comentarios,
             @RequestParam (required = false)
@@ -71,7 +71,6 @@ public class MovimientoController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(movimientoMapper.toResponseDto(movimientoService.registrarEntrada(
                 productoId,
-                userId,
                 cantidad,
                 comentarios,
                 archivo
@@ -89,7 +88,7 @@ public class MovimientoController {
     @PostMapping(path = "/salida")
     public ResponseEntity <MovimientoResponseDto> registrarSalida(@Valid @RequestBody MovimientoRequestDto movimiento){
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(movimientoMapper.toResponseDto(movimientoService.registrarSalida(movimiento.getProductoId(),movimiento.getUserId(),movimiento.getCantidad(),movimiento.getComentarios()))) ;
+        return ResponseEntity.status(HttpStatus.CREATED).body(movimientoMapper.toResponseDto(movimientoService.registrarSalida(movimiento.getProductoId(),movimiento.getCantidad(),movimiento.getComentarios()))) ;
     }
 
     @GetMapping(path = "/obtenerMovimientosPorIDProducto/{id}")

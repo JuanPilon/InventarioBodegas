@@ -11,7 +11,7 @@ public interface ProductRepository extends JpaRepository<Producto, Integer> {
 
     Producto findByClaveGeneral(String claveGeneral);
 
-    List<Producto> findByNombreContainingIgnoreCaseOrClaveGeneralContainingIgnoreCaseOrBodegaContainingIgnoreCaseOrTipoContainingIgnoreCase(
+    List<Producto> findByDescripcionDelProductoContainingIgnoreCaseOrClaveGeneralContainingIgnoreCaseOrBodegasContainingIgnoreCaseOrCategoriaContainingIgnoreCase(
             String nombre,
             String claveGeneral,
             String bodega,

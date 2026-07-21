@@ -10,8 +10,11 @@ import com.MV_Equipos.Inventario.repository.MovementRepository;
 import com.MV_Equipos.Inventario.service.MovimientoService;
 import com.MV_Equipos.Inventario.service.ProductoService;
 import com.MV_Equipos.Inventario.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,18 +38,21 @@ public class MovimientoServiceImpl implements MovimientoService {
     private ProductoService productoService;
     @Autowired
     private UsuarioService usuarioService;
+    @Value("${app.upload.path}")
+    private String uploadPath;
 
 
 
     @Transactional
     @Override
-    public Movimiento registrarEntrada(Integer productoId, Integer usuarioId, Integer cantidad, String comentarios, MultipartFile archivo) {
+    public Movimiento registrarEntrada(Integer productoId, Integer cantidad, String comentarios, MultipartFile archivo) {
         Producto productoEncontrado = productoService.buscarPorID(productoId);
-        Usuario usuarioEncontrado = usuarioService.obtenerPorID(usuarioId);
+        Usuario usuarioEncontrado = obtenerUsuarioAutenticado();
         String tipoArchivo = null;
         String nombreArchivo = null;
         Path rutaArchivo = null;
-        String rutaCarpeta ="uploads/entradas/";
+
+        String rutaCarpeta = uploadPath + "/entradas/";
 
 
 
@@ -111,9 +117,9 @@ public class MovimientoServiceImpl implements MovimientoService {
 
     @Transactional
     @Override
-    public Movimiento registrarSalida(Integer productoId, Integer usuarioId, Integer cantidad, String comentarios) {
+    public Movimiento registrarSalida(Integer productoId, Integer cantidad, String comentarios) {
         Producto productoEncontrado = productoService.buscarPorID(productoId);
-        Usuario usuarioEncontrado = usuarioService.obtenerPorID(usuarioId);
+        Usuario usuarioEncontrado = obtenerUsuarioAutenticado();
 
             Integer cantidadValidada=validarCantidad(cantidad);
             Integer stockAnterior = productoEncontrado.getStock();
@@ -143,7 +149,7 @@ public class MovimientoServiceImpl implements MovimientoService {
     @Transactional(readOnly = true)
     @Override
     public List<Movimiento> obtenerMovimientos() {
-        return movementRepository.findAll();
+        return movementRepository.findAllByOrderByMDayDesc();
     }
     @Transactional(readOnly = true)
     @Override
@@ -202,6 +208,8 @@ public class MovimientoServiceImpl implements MovimientoService {
 
     }
 
+
+
     private Integer validarCantidad(Integer cantidad) {
         if(cantidad==null|| cantidad<=0){
             throw new ValidacionException("El campo no puede ir vacio y debe ser mayor que 0");
@@ -213,6 +221,13 @@ public class MovimientoServiceImpl implements MovimientoService {
         if(id==null||id<=0){
             throw new ValidacionException("El campo id no puede ser vacio y debe ser mayor a 0 ");
         }
+    }
+
+    private Usuario obtenerUsuarioAutenticado()
+    {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        return usuarioService.obtenerPorUsername(username);
     }
 
 

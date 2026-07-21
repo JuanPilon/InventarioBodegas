@@ -2,8 +2,10 @@ package com.MV_Equipos.Inventario.serviceImplementation;
 
 import com.MV_Equipos.Inventario.Exception.RecursoNoEncontradoException;
 import com.MV_Equipos.Inventario.Exception.ValidacionException;
+import com.MV_Equipos.Inventario.config.SecurityConfig;
 import com.MV_Equipos.Inventario.entity.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.MV_Equipos.Inventario.repository.UserRepository;
 import com.MV_Equipos.Inventario.service.UsuarioService;
@@ -16,6 +18,8 @@ import java.util.List;
 public class UsuarioServiceImpl implements UsuarioService {
     @Autowired//sirve para la inyeccion de dependencias trae un los metodos de la clase elegida instanciando un metodo
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override//nos idica que estamos trabajando con un metodo modificado del repositorio
@@ -25,7 +29,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setUsername(normalizarTexto(usuario.getUsername()));//El metodo elimina espacios y cambia automaticamente a mayusculas para el guardado del usuario
         validarUsuarioExistente(usuario.getUsername());//permite la revision de usuario ya existente
         validarPassword(usuario);//Verifica que la contrasena contenga una mayuscula y un numero
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return userRepository.save(usuario);
+
     }
 
     @Transactional(readOnly = true)

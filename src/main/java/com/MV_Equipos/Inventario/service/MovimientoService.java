@@ -11,13 +11,12 @@ import java.util.Optional;
 public interface MovimientoService {
 
     Movimiento registrarEntrada(Integer productoId,
-                                Integer usuarioId,
                                 Integer cantidad,
                                 String comentarios,
                                 MultipartFile archivo);
 
     Movimiento registrarSalida(Integer productoId,
-                               Integer usuarioId,
+
                                Integer cantidad,
                                String comentarios);
 
@@ -27,6 +26,7 @@ public interface MovimientoService {
     List<Movimiento>obtenerEntradas(TipoMovimiento movimiento);
     Movimiento buscarMovimientoPorID(Integer id);
     Resource obtenerArchivoMovimiento(Integer movimientoId);
+
 
 
 

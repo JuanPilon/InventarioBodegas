@@ -23,6 +23,7 @@ public class UserMapper {
                 .id(entity.getId())
                 .name(entity.getName())
                 .username(entity.getUsername())
+                .rol(String.valueOf(entity.getRol()))
                 .build();
     }
 }

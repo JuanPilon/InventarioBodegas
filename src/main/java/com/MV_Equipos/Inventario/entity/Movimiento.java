@@ -1,12 +1,12 @@
 package com.MV_Equipos.Inventario.entity;
 import com.MV_Equipos.Inventario.enums.TipoMovimiento;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.sql.Timestamp;
 
 @Entity
@@ -60,12 +60,13 @@ public class Movimiento {
 
 
     @Column(name = "MOVEMENT_DAY")
-    private Timestamp mDay;
+    private Timestamp MDay;
 
     @PrePersist// esta anotacion permite crear el dato del date antes del guardado para que no mande nulo
     public void prePersist() {
-        this.mDay = new Timestamp(System.currentTimeMillis());
+        this.MDay = new Timestamp(System.currentTimeMillis());
     }
 
-
+    @Value("${app.upload.path}")
+    private String uploadPath;
 }

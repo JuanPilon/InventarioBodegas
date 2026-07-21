@@ -1,9 +1,6 @@
 package com.MV_Equipos.Inventario.Dto;
 
 import com.MV_Equipos.Inventario.entity.Movimiento;
-import com.MV_Equipos.Inventario.entity.Producto;
-import com.MV_Equipos.Inventario.entity.Usuario;
-import com.MV_Equipos.Inventario.enums.TipoMovimiento;
 import org.springframework.stereotype.Component;
 
 
@@ -31,13 +28,14 @@ public class MovimientoMapper {
                 .userId(entity.getUserId().getId())
                 .usuario(entity.getUserId().getName())
                 .tipoMovimiento(entity.getTipoMovimiento())
-                .producto(entity.getProductoId().getNombre())
+                .descripcionDelProducto(entity.getProductoId().getDescripcionDelProducto())
                 .cantidad(entity.getCantidad())
                 .stockFinal(entity.getStockFinal())
                 .nombreArchivo(entity.getNombreArchivo())
                 .rutaArchivo(entity.getRutaArchivo())
                 .tipoArchivo(entity.getTipoArchivo())
                 .comentarios(entity.getComentarios())
+                .mDay(String.valueOf(entity.getMDay()))
                 .build();
 
     }

@@ -23,8 +23,7 @@ public class MovimientoRequestDto {
     private Integer productoId;
 
 
-    @NotNull(message = "Debe seleccionar un usuario")
-    private Integer userId;
+
 
 
     @NotNull(message = "Debe indicar el tipo de movimiento")

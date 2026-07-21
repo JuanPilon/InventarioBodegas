@@ -26,44 +26,49 @@ public class Producto {
     private Integer id;
 
 
-    @Column(name = "NOMBRE", nullable = false, length = 255)
-    private String nombre;
+    @Column(name = "DESCRIPCION_DEL_PRODUCTO", nullable = false, length = 255)
+    private String descripcionDelProducto;
 
 
     @Column(name = "CLAVE_GENERAL", nullable = false, length = 120)
     private String claveGeneral;
 
 
-    @Column(name = "TAMANO", nullable = false, length = 45)
-    private String tamano;
+    @Column(name = "MEDIDA", nullable = false, length = 45)
+    private String medida;
+
+    @Column(name="EMBALAJE",nullable = false)
+    private String embalaje;
+
+    @Column(name="MARCA",nullable = false)
+    private String marca;
+
+    @Column(name = "CATEGORIA", nullable = false, length = 45)
+    private String categoria;
 
 
-    @Column(name = "TIPO", nullable = false, length = 45)
-    private String tipo;
+    @Column(name = "UNIDAD_MINIMA", nullable = false, length = 45)
+    private String unidadMinima;
 
 
-    @Column(name = "NOMENCLATURA", nullable = false, length = 45)
-    private String nomenclatura;
+    @Column(name = "PRECIO_POR_UNIDAD_COMPRA", precision = 10, scale = 2, nullable = false)
+    private BigDecimal precioPorUnidadCompra;//preciosion nos indica cuantos digitos tendra ese atributo y scale cuantos seran decimales aunque en sql se usa decimal en springboot se usa bigdecimal para precios.
 
 
-    @Column(name = "PRECIO_POR_UNIDAD", precision = 10, scale = 2, nullable = false)
-    private BigDecimal precioPorUnidad;//preciosion nos indica cuantos digitos tendra ese atributo y scale cuantos seran decimales aunque en sql se usa decimal en springboot se usa bigdecimal para precios.
-
-
-    @Column(name = "FECHA_DE_PRECIO", nullable = false)
+    @Column(name = "FECHA_DE_COMPRA", nullable = false)
 // Al contradio de timestamp donde se va a generar la fecha automaticamente aqui si necesitamos mandar el dato o despues la opcion para poder modificarla
-    private LocalDate fechaDePrecio;
+    private LocalDate fechaDeCompra;
 
     @Column(name = "STOCK", nullable = false)
     private Integer stock;
 
 
-    @Column(name = "Bodega", nullable = false, length = 45)
-    private String bodega;
+    @Column(name = "BODEGAS", nullable = false, length = 45)
+    private String bodegas;
 
     @Lob//Indica de joa que este campo tendra datos grandes como puede ser un texto
-    @Column(name = "NOTAS", columnDefinition = "TEXT")
-    private String notas;
+    @Column(name = "NOTAS_GENERALES", columnDefinition = "TEXT")
+    private String notasGenerales;
 
     @Column(name = "C_DATE")
     private Timestamp cDate;

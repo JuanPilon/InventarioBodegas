@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Data
@@ -15,32 +16,39 @@ import java.time.LocalDate;
 public class ProductoResponseDto {
     private Integer id;
 
-    private String nombre;
+    private String descripcionDelProducto;
 
 
     private String claveGeneral;
 
 
-    private String tamano;
+    private String medida;
+
+    private String embalaje;
 
 
-    private String tipo;
+    private String categoria;
+
+    private String marca;
+
+    private String unidadMinima;
 
 
-    private String nomenclatura;
+    private BigDecimal precioPorUnidadCompra;
 
 
-    private BigDecimal precioPorUnidad;
-
-
-    private LocalDate fechaDePrecio;
+    private LocalDate fechaDeCompra;
 
 
     private Integer stock;
 
 
-    private String bodega;
+    private String bodegas;
 
 
-    private String notas;
+    private String notasGenerales;
+
+    private Timestamp cDate;
+
+
 }

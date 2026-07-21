@@ -10,5 +10,5 @@ public interface MovementRepository extends JpaRepository<Movimiento,Integer>//I
 {
     List<Movimiento> findByProductoId_Id(Integer productoId);
     List<Movimiento>findByTipoMovimiento(TipoMovimiento movimiento);
-
+    List<Movimiento> findAllByOrderByMDayDesc();
 }

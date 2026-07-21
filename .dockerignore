@@ -1,0 +1,13 @@
+target/
+
+.idea/
+
+.vscode/
+
+*.log
+
+.git
+
+.gitignore
+
+.DS_Store

@@ -21,12 +21,14 @@ public class ProductoServiceImp implements ProductoService {
     @Transactional
     @Override
     public Producto guardarProducto(Producto producto) {
-        producto.setNombre(normalizarTexto(producto.getNombre()));
+        producto.setDescripcionDelProducto(normalizarTexto(producto.getDescripcionDelProducto()));
         producto.setClaveGeneral(normalizarTexto(producto.getClaveGeneral()));
-        producto.setTamano(normalizarTexto(producto.getTamano()));
-        producto.setTipo(normalizarTexto(producto.getTipo()));
-        producto.setBodega(normalizarTexto(producto.getBodega()));
-        producto.setNomenclatura(normalizarTexto(producto.getNomenclatura()));
+        producto.setMedida(normalizarTexto(producto.getMedida()));
+        producto.setEmbalaje(normalizarTexto(producto.getEmbalaje()));
+        producto.setMedida(normalizarTexto(producto.getMedida()));
+        producto.setCategoria(normalizarTexto(producto.getCategoria()));
+        producto.setBodegas(normalizarTexto(producto.getBodegas()));
+        producto.setUnidadMinima(normalizarTexto(producto.getUnidadMinima()));
         return productRepository.save(producto);
     }
     @Transactional(readOnly = true)
@@ -58,44 +60,52 @@ public class ProductoServiceImp implements ProductoService {
     @Override
     public Producto editarParcial(Integer id, Producto productoActualizado) {
         Producto producto = buscarPorID(id);
-        if (productoActualizado.getNombre() != null) {
-            validarTexto(productoActualizado.getNombre());
-            producto.setNombre(normalizarTexto(productoActualizado.getNombre()));
+        if (productoActualizado.getDescripcionDelProducto() != null) {
+            validarTexto(productoActualizado.getDescripcionDelProducto());
+            producto.setDescripcionDelProducto(normalizarTexto(productoActualizado.getDescripcionDelProducto()));
         }
 
         if (productoActualizado.getClaveGeneral() != null) {
             validarTexto(productoActualizado.getClaveGeneral());
             producto.setClaveGeneral(normalizarTexto(productoActualizado.getClaveGeneral()));
         }
-        if(productoActualizado.getPrecioPorUnidad() != null){
+        if(productoActualizado.getPrecioPorUnidadCompra() != null){
 
-            if(productoActualizado.getPrecioPorUnidad()
+            if(productoActualizado.getPrecioPorUnidadCompra()
                     .compareTo(BigDecimal.ZERO) <= 0){
 
                 throw new ValidacionException(
                         "El precio debe ser mayor a cero");
             }
 
-            producto.setPrecioPorUnidad(productoActualizado.getPrecioPorUnidad());
+            producto.setPrecioPorUnidadCompra(productoActualizado.getPrecioPorUnidadCompra());
         }
-        if (productoActualizado.getFechaDePrecio() != null) {
-            if(productoActualizado.getFechaDePrecio().isAfter(LocalDate.now())){
+        if (productoActualizado.getFechaDeCompra() != null) {
+            if(productoActualizado.getFechaDeCompra().isAfter(LocalDate.now())){
                 throw new ValidacionException("La fecha que quieres cambiar debe ser actual o anterior");
             }
-            producto.setFechaDePrecio(productoActualizado.getFechaDePrecio());
+            producto.setFechaDeCompra(productoActualizado.getFechaDeCompra());
         }
 
-        if (productoActualizado.getTamano() != null) {
-            validarTexto(productoActualizado.getTamano());
-            producto.setTamano(normalizarTexto(productoActualizado.getTamano()));
+        if (productoActualizado.getMedida() != null) {
+            validarTexto(productoActualizado.getMedida());
+            producto.setMedida(normalizarTexto(productoActualizado.getMedida()));
         }
-        if (productoActualizado.getTipo() != null) {
-            validarTexto(productoActualizado.getTipo());
-            producto.setTipo(normalizarTexto(productoActualizado.getTipo()));
+        if (productoActualizado.getMarca() != null) {
+            validarTexto(productoActualizado.getMarca());
+            producto.setMarca(normalizarTexto(productoActualizado.getMarca()));
         }
-        if (productoActualizado.getNomenclatura() != null) {
-            validarTexto(productoActualizado.getNomenclatura());
-            producto.setNomenclatura(normalizarTexto(productoActualizado.getNomenclatura()));
+        if(productoActualizado.getEmbalaje() != null) {
+            validarTexto(productoActualizado.getEmbalaje());
+            producto.setEmbalaje(normalizarTexto(productoActualizado.getEmbalaje()));
+        }
+        if (productoActualizado.getCategoria() != null) {
+            validarTexto(productoActualizado.getCategoria());
+            producto.setCategoria(normalizarTexto(productoActualizado.getCategoria()));
+        }
+        if (productoActualizado.getUnidadMinima() != null) {
+            validarTexto(productoActualizado.getUnidadMinima());
+            producto.setUnidadMinima(normalizarTexto(productoActualizado.getUnidadMinima()));
         }
 
         if(productoActualizado.getStock() != null){
@@ -107,14 +117,14 @@ public class ProductoServiceImp implements ProductoService {
 
             producto.setStock(productoActualizado.getStock());
         }
-        if (productoActualizado.getBodega() != null) {
-            validarTexto(productoActualizado.getBodega());
-            producto.setBodega(normalizarTexto(productoActualizado.getBodega()));
+        if (productoActualizado.getBodegas() != null) {
+            validarTexto(productoActualizado.getBodegas());
+            producto.setBodegas(normalizarTexto(productoActualizado.getBodegas()));
         }
 
-        if (productoActualizado.getNotas() != null) {
-            validarTexto(productoActualizado.getNotas());
-            producto.setNotas(productoActualizado.getNotas());
+        if (productoActualizado.getNotasGenerales() != null) {
+            validarTexto(productoActualizado.getNotasGenerales());
+            producto.setNotasGenerales(productoActualizado.getNotasGenerales());
         }
         return productRepository.save(producto);
     }
@@ -124,7 +134,7 @@ public class ProductoServiceImp implements ProductoService {
     public List<Producto> buscarPorCoincidencia(String text) {
         validarTexto(text);
         String texto=normalizarTexto(text);
-        List<Producto> productosEncontrados=productRepository.findByNombreContainingIgnoreCaseOrClaveGeneralContainingIgnoreCaseOrBodegaContainingIgnoreCaseOrTipoContainingIgnoreCase(texto, texto, texto, texto);
+        List<Producto> productosEncontrados=productRepository.findByDescripcionDelProductoContainingIgnoreCaseOrClaveGeneralContainingIgnoreCaseOrBodegasContainingIgnoreCaseOrCategoriaContainingIgnoreCase(texto, texto, texto, texto);
         if(productosEncontrados.isEmpty()){
             throw new RecursoNoEncontradoException("No se encontraron coincidencias con los datos ingresados");
 

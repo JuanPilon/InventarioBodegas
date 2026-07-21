@@ -51,6 +51,8 @@ public class UsuarioController {
             @ApiResponse(responseCode = "200", description = "Usuario encontrado"),
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
+
+
     @GetMapping(path = "/buscar/{id}")
     public ResponseEntity<UserResponseDto> obtenerPorID(@PathVariable Integer id) {
         Usuario usuario=usuarioService.obtenerPorID(id);
@@ -58,7 +60,7 @@ public class UsuarioController {
         );
     }
 
-    @Operation(
+    @Operation(//son las anotaciones para swagger y poder integrar informacion a los endpoint para la documentacion
             summary = "Crear usuario",
             description = "Registra un nuevo usuario en el sistema"
     )

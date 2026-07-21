@@ -17,7 +17,7 @@ public class ProductEditRequestDto {
 
 
     @Size(min =2,max = 255)
-    private String nombre;
+    private String descripcionDelProducto;
 
 
 
@@ -27,31 +27,36 @@ public class ProductEditRequestDto {
 
 
     @Size(min =2,max = 45)
-    private String tamano;
+    private String medida;
 
+    @Size(min =2,max = 100)
+    private String marca;
+
+    @Size(min =2,max = 100)
+    private String embalaje;
 
 
     @Size(min =2, max = 45)
-    private String tipo;
+    private String categoria;
 
     @Size(min =2, max = 45)
-    private String nomenclatura;
+    private String unidadMinima;
 
     @DecimalMin(value = "0.0",inclusive = false,message = "El precio debe ser mayor a 0")
-    private BigDecimal precioPorUnidad;
+    private BigDecimal precioPorUnidadCompra;
 
 
 
     @PastOrPresent(message = "La fecha no puede ser futura")//Indica que solo se puede registrar una fecha presente o pasada pero nunca futura
-    private LocalDate fechaDePrecio;
+    private LocalDate fechaDeCompra;
 
     @PositiveOrZero(message = "El stock no puede ser negativo")
     private Integer stock;
 
     @Size(max = 45)
-    private String bodega;
+    private String bodegas;
 
 
-    private String notas;
+    private String notasGenerales;
 
 }

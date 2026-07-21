@@ -22,7 +22,7 @@ public class MovimientoResponseDto {
 
     private String usuario;
 
-    private String producto;
+    private String descripcionDelProducto;
 
 
     private Integer cantidad;
@@ -37,4 +37,6 @@ public class MovimientoResponseDto {
     private String tipoArchivo;
 
     private String comentarios;
+
+    private String mDay;
 }
